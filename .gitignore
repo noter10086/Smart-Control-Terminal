@@ -1,0 +1,42 @@
+# ===== Keil MDK-ARM 编译输出目录 =====
+MDK-ARM/Smart Control Terminal/
+MDK-ARM/DebugConfig/
+MDK-ARM/RTE/
+MDK-ARM/.vscode/keil-assistant.log
+MDK-ARM/.vscode/uv4.log.lock
+
+# ===== Keil 个人设置 =====
+*.uvguix.*
+*.uvgui.*
+
+# ===== 编译中间产物 =====
+*.o
+*.d
+*.crf
+*.axf
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.lnp
+*.dep
+*.sct
+*.htm
+*.build_log.htm
+*.scvd
+*.iex
+*.i
+*.__i
+*.bak
+*.__i
+
+# ===== 编辑器 / 系统 =====
+.vscode/settings.json
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ===== Claude Code =====
+.claude/
+CLAUDE.md
