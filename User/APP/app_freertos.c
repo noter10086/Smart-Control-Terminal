@@ -145,10 +145,10 @@ void start_task(void* pvParameters)
     }
   }
 
-  /*启动任务只需执行一次，用完删除自身*/
-  vTaskDelete(NULL);
-  
   /*退出临界区*/
   taskEXIT_CRITICAL();
+
+  /*启动任务只需执行一次，用完删除自身*/
+  vTaskDelete(NULL);
 }
 
