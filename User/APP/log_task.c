@@ -6,7 +6,7 @@
 
 
 /**
-  * @brief  日志任务：接收日志消息并处理
+  * @brief  鏃ュ織浠诲姟锛氭帴鏀舵棩蹇楁秷鎭苟澶勭悊
   * @note   None
   * @param  None
   * @retval None
@@ -19,21 +19,21 @@ void log_task(void* pvParameters)
     {
         if (xQueueReceive(log_queue, &log_message, pdMS_TO_TICKS(100)) == pdTRUE)
         {
-            /* 处理日志消息 */
+            /* 澶勭悊鏃ュ織娑堟伅 */
             if (printf("%s", log_message.message) > 0)
             {
-                /* 日志输出成功 */
+                /* 鏃ュ織杈撳嚭鎴愬姛 */
                 MonitorTask_ReportFunction(TASK_ID_LOG, 1);
             }
             else
             {
-                /* 日志输出失败 */
+                /* 鏃ュ織杈撳嚭澶辫触 */
                 MonitorTask_ReportFunction(TASK_ID_LOG, 0);
             }
 
         }
 
-        /* 任务存活报告 */
+        /* 浠诲姟瀛樻椿鎶ュ憡 */
         MonitorTask_ReportHeartbeat(TASK_ID_LOG);
 
     }

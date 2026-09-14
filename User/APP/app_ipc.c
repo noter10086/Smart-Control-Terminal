@@ -19,7 +19,7 @@ void App_IPC_Init(void)
 
     if (sensor_queue == NULL || log_queue == NULL || system_event_group == NULL)
     {
-        /* IPC´´½¨Ê§°Ü */
+        /* IPCåˆ›å»ºå¤±è´¥ */
         while (1)
         {
             App_Log("IPC creation failed!\r\n");

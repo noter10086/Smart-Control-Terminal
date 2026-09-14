@@ -16,12 +16,12 @@ typedef enum
 
 typedef struct
 {
-    /* Liveness£ºÈÎÎñ´æ»î¼à²â */
+    /* Livenessï¼šä»»åŠ¡å­˜æ´»ç›‘æµ‹ */
     uint32_t heartbeat;
     TickType_t last_tick;
     TickType_t heartbeat_timeout;
 
-    /* Functionality£ºÈÎÎñ¹¦ÄÜ¼à²â */
+    /* Functionalityï¼šä»»åŠ¡åŠŸèƒ½ç›‘æµ‹ */
     uint8_t function_ok;
     TickType_t last_function_tick;
     TickType_t function_timeout;

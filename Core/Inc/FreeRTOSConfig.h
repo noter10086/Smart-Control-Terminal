@@ -43,11 +43,11 @@
 #define configUSE_IDLE_HOOK			0
 #define configUSE_TICK_HOOK			0
 
-#define configCPU_CLOCK_HZ			( ( unsigned long ) 168000000 )	/* SYSCLK 168MHz£¬±ØĞëÓë SystemClock_Config() ±£³ÖÒ»ÖÂ */
+#define configCPU_CLOCK_HZ			( ( unsigned long ) 168000000 )	/* SYSCLK 168MHzï¼Œå¿…é¡»ä¸ SystemClock_Config() ä¿æŒä¸€è‡´ */
     
 #define configTICK_RATE_HZ			( ( TickType_t ) 1000 )
 
-#define configMAX_PRIORITIES		( 6 )	/* È¡Öµ·¶Î§ 0~5£¬control_task Ê¹ÓÃ×î¸ß¼¶ 5 */
+#define configMAX_PRIORITIES		( 6 )	/* å–å€¼èŒƒå›´ 0~5ï¼Œcontrol_task ä½¿ç”¨æœ€é«˜çº§ 5 */
 
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 128 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) ( 17 * 1024 ) )
@@ -82,15 +82,15 @@ configKERNEL_INTERRUPT_PRIORITY setting.  Here 15 corresponds to the lowest
 NVIC value of 255. */
 #define configLIBRARY_KERNEL_INTERRUPT_PRIORITY	15
 
-/*Ìí¼Ó±ØĞëµÄÈı¸öºê*/
+/*æ·»åŠ å¿…é¡»çš„ä¸‰ä¸ªå®*/
 #define xPortPendSVHandler  PendSV_Handler
 #define vPortSVCHandler     SVC_Handler
 #define INCLUDE_xTaskGetSchedulerState   1
 
-/* Ìí¼ÓÏîÄ¿ĞèÒªµÄºê */
+/* æ·»åŠ é¡¹ç›®éœ€è¦çš„å® */
 #define configSUPPORT_DYNAMIC_ALLOCATION 1
 
-/* Èí¼ş¶¨Ê±Æ÷Ïà¹Øºê */
+/* è½¯ä»¶å®šæ—¶å™¨ç›¸å…³å® */
 #define configUSE_TIMERS                    1
 #define configTIMER_TASK_PRIORITY           2
 #define configTIMER_QUEUE_LENGTH            10

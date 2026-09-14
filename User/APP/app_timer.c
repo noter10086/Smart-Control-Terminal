@@ -43,7 +43,7 @@ void App_Timer_Init(void)
 
     if ((heartbeat_timer == NULL) || (log_timer == NULL))
     {
-        /* Timer´´½¨Ê§°Ü */
+        /* Timeråˆ›å»ºå¤±è´¥ */
         while (1)
         {
             App_Log("Timer creation failed!\r\n");

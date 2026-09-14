@@ -8,7 +8,7 @@
 #include "bsp_adc.h"
 
 /**
-  * @brief  采集任务：每100ms采集ADC数据，并将数据放入队列中
+  * @brief  閲囬泦浠诲姟锛氭瘡100ms閲囬泦ADC鏁版嵁锛屽苟灏嗘暟鎹斁鍏ラ槦鍒椾腑
   * @note   None
   * @param  None
   * @retval None
@@ -21,28 +21,28 @@ void collect_task(void* pvParameters)
 
   while(1)
   {
-    function_ok = 1;  //默认功能正常
+    function_ok = 1;  //榛樿鍔熻兘姝ｅ父
     
-    sensor_data.adc_value = BSP_ADC_GetValue();  //采集数据
+    sensor_data.adc_value = BSP_ADC_GetValue();  //閲囬泦鏁版嵁
 
     xQueueSend(sensor_queue, 
               &sensor_data,
-              pdMS_TO_TICKS(10));  //将数据放入队列中
+              pdMS_TO_TICKS(10));  //灏嗘暟鎹斁鍏ラ槦鍒椾腑
 
-    /* 记录日志 */
+    /* 璁板綍鏃ュ織 */
     App_Log("CollectTask ADC = %u\r\n", sensor_data.adc_value);
 
-    /* 业务功能是否正常报告 */
+    /* 涓氬姟鍔熻兘鏄惁姝ｅ父鎶ュ憡 */
     if (sensor_data.adc_value > 4095U)
     {
         function_ok = 0;
     }
     MonitorTask_ReportFunction(TASK_ID_COLLECT, function_ok);
 
-    /* 任务存活报告 */
+    /* 浠诲姟瀛樻椿鎶ュ憡 */
     MonitorTask_ReportHeartbeat(TASK_ID_COLLECT);
     
-    vTaskDelay(pdMS_TO_TICKS(100));  //延时100ms
+    vTaskDelay(pdMS_TO_TICKS(100));  //寤舵椂100ms
   }
 }
 

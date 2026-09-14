@@ -8,7 +8,7 @@
 #include "bsp_pwm.h"
 
 /**
-  * @brief  ¿ØÖÆÈÎÎñ£º¸ù¾İ´«¸ĞÆ÷Êı¾İµ÷ÕûPWMÕ¼¿Õ±È
+  * @brief  æ§åˆ¶ä»»åŠ¡ï¼šæ ¹æ®ä¼ æ„Ÿå™¨æ•°æ®è°ƒæ•´PWMå ç©ºæ¯”
   * @note   None
   * @param  None
   * @retval None
@@ -32,7 +32,7 @@ void control_task(void* pvParameters)
 
   while(1)
   {
-    function_ok = 1;  //Ä¬ÈÏ¹¦ÄÜÕı³£
+    function_ok = 1;  //é»˜è®¤åŠŸèƒ½æ­£å¸¸
     
     if (xQueueReceive(sensor_queue, &sensor_data, pdMS_TO_TICKS(100)) == pdTRUE)
     {
@@ -41,24 +41,24 @@ void control_task(void* pvParameters)
       
       if (duty > 100U)
       {
-        /* ÒµÎñ´¦ÀíÊ§°Ü */
+        /* ä¸šåŠ¡å¤„ç†å¤±è´¥ */
         function_ok = 0;
       }
       else
       {
-        /* ÒµÎñ´¦Àí³É¹¦ */  
+        /* ä¸šåŠ¡å¤„ç†æˆåŠŸ */  
         function_ok = 1;
       }
       BSP_PWM_SetDuty(duty);
 
-      /* ¼ÇÂ¼ÈÕÖ¾ */
+      /* è®°å½•æ—¥å¿— */
       App_Log("ControlTask PWM = %u%%\r\n", duty);
 
-      /* ÒµÎñ¹¦ÄÜÊÇ·ñÕı³£±¨¸æ */
+      /* ä¸šåŠ¡åŠŸèƒ½æ˜¯å¦æ­£å¸¸æŠ¥å‘Š */
       MonitorTask_ReportFunction(TASK_ID_CONTROL, function_ok);
 
     }
-    /* ÈÎÎñ´æ»î±¨¸æ */
+    /* ä»»åŠ¡å­˜æ´»æŠ¥å‘Š */
     MonitorTask_ReportHeartbeat(TASK_ID_CONTROL);
       
   }

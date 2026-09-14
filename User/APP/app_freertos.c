@@ -1,12 +1,12 @@
 #include "app_freertos.h"
 
-/* appÏà¹ØÎÄ¼ş */
+/* appç›¸å…³æ–‡ä»¶ */
 #include "app_data.h"
 #include "app_ipc.h"
 #include "app_timer.h"
 
 
-/* taskÏà¹ØÎÄ¼ş */
+/* taskç›¸å…³æ–‡ä»¶ */
 #include "monitor_task.h"
 #include "collect_task.h"
 #include "control_task.h"
@@ -14,54 +14,54 @@
 #include "watchdog_task.h"
 
 
-/*start_taskµÄÅäÖÃ*/
+/*start_taskçš„é…ç½®*/
 #define START_TASK_STACK 128
 #define START_TASK_PRIORITY 1
 static TaskHandle_t start_task_handle;
 
 
-/*collect_taskµÄÅäÖÃ*/
+/*collect_taskçš„é…ç½®*/
 #define COLLECT_TASK_STACK 128
 #define COLLECT_TASK_PRIORITY 4
 static TaskHandle_t collect_task_handle;
-/*control_taskµÄÅäÖÃ*/
+/*control_taskçš„é…ç½®*/
 #define CONTROL_TASK_STACK 128
 #define CONTROL_TASK_PRIORITY 5
 static TaskHandle_t control_task_handle;
-/*log_taskµÄÅäÖÃ*/
+/*log_taskçš„é…ç½®*/
 #define LOG_TASK_STACK 128
 #define LOG_TASK_PRIORITY 2
 static TaskHandle_t log_task_handle;
-/* watchdog_taskµÄÅäÖÃ */
+/* watchdog_taskçš„é…ç½® */
 #define WATCHDOG_TASK_STACK 128
 #define WATCHDOG_TASK_PRIORITY 3
 static TaskHandle_t watchdog_task_handle;
 
 
-/* º¯ÊıÉùÃ÷ */
+/* å‡½æ•°å£°æ˜ */
 void start_task(void* pvParameters);
 
 /**
-  * @brief  Æô¶¯FreeRTOS
+  * @brief  å¯åŠ¨FreeRTOS
   * @note   None
   * @param  None
   * @retval None
   */
 void freertos_start(void)
 {
-  /* ´´½¨Ò»¸öÆô¶¯ÈÎÎñ*/
-  xTaskCreate( (TaskFunction_t) start_task,               //ÈÎÎñº¯ÊıµÄµØÖ·
-              (char *) "start_task",                       //ÈÎÎñÃû×Ö×Ö·û´®
-              (configSTACK_DEPTH_TYPE) START_TASK_STACK,   //ÈÎÎñÕ»´óĞ¡
-              (void *) NULL,                               //´«µİ¸øÈÎÎñµÄ²ÎÊı
-              (UBaseType_t) START_TASK_PRIORITY,           //ÈÎÎñÓÅÏÈ¼¶
-              (TaskHandle_t *)  &start_task_handle );      //ÈÎÎñ¾ä±úµÄµØÖ·
-  /* Æô¶¯ÈÎÎñµ÷¶ÈÆ÷£¬»á×Ô¶¯´´½¨¿ÕÏĞº¯Êı*/
+  /* åˆ›å»ºä¸€ä¸ªå¯åŠ¨ä»»åŠ¡*/
+  xTaskCreate( (TaskFunction_t) start_task,               //ä»»åŠ¡å‡½æ•°çš„åœ°å€
+              (char *) "start_task",                       //ä»»åŠ¡åå­—å­—ç¬¦ä¸²
+              (configSTACK_DEPTH_TYPE) START_TASK_STACK,   //ä»»åŠ¡æ ˆå¤§å°
+              (void *) NULL,                               //ä¼ é€’ç»™ä»»åŠ¡çš„å‚æ•°
+              (UBaseType_t) START_TASK_PRIORITY,           //ä»»åŠ¡ä¼˜å…ˆçº§
+              (TaskHandle_t *)  &start_task_handle );      //ä»»åŠ¡å¥æŸ„çš„åœ°å€
+  /* å¯åŠ¨ä»»åŠ¡è°ƒåº¦å™¨ï¼Œä¼šè‡ªåŠ¨åˆ›å»ºç©ºé—²å‡½æ•°*/
   vTaskStartScheduler();
 }
 
 /**
-  * @brief  Æô¶¯ÈÎÎñ:ÓÃÀ´´´½¨ÆäËûtask
+  * @brief  å¯åŠ¨ä»»åŠ¡:ç”¨æ¥åˆ›å»ºå…¶ä»–task
   * @note   None
   * @param  None
   * @retval None
@@ -70,16 +70,16 @@ void start_task(void* pvParameters)
 {
   taskENTER_CRITICAL();
 
-  /* 1. ³õÊ¼»¯ÈÎÎñ¼à²âÄ£¿é */
+  /* 1. åˆå§‹åŒ–ä»»åŠ¡ç›‘æµ‹æ¨¡å— */
   MonitorTask_Init();
 
-  /* 2. ³õÊ¼»¯IPC */
+  /* 2. åˆå§‹åŒ–IPC */
   App_IPC_Init();
 
-  /* 3. Æô¶¯Èí¼ş¶¨Ê±Æ÷ */
+  /* 3. å¯åŠ¨è½¯ä»¶å®šæ—¶å™¨ */
   App_Timer_Init();
 
-  /* 4. ÉèÖÃÏµÍ³ÊÂ¼ş±êÖ¾ */
+  /* 4. è®¾ç½®ç³»ç»Ÿäº‹ä»¶æ ‡å¿— */
   xEventGroupSetBits(
         system_event_group,
         EVENT_ADC_READY |
@@ -87,7 +87,7 @@ void start_task(void* pvParameters)
         EVENT_SYSTEM_READY
     );
 
-  /* 5. ´´½¨ÆäËûÈÎÎñ */
+  /* 5. åˆ›å»ºå…¶ä»–ä»»åŠ¡ */
   BaseType_t xReturn = xTaskCreate( (TaskFunction_t) log_task,       
               (char *) "log_task",                     
               (configSTACK_DEPTH_TYPE) LOG_TASK_STACK, 
@@ -145,10 +145,10 @@ void start_task(void* pvParameters)
     }
   }
 
-  /*ÍË³öÁÙ½çÇø*/
+  /*é€€å‡ºä¸´ç•ŒåŒº*/
   taskEXIT_CRITICAL();
 
-  /*Æô¶¯ÈÎÎñÖ»ĞèÖ´ĞĞÒ»´Î£¬ÓÃÍêÉ¾³ı×ÔÉí*/
+  /*å¯åŠ¨ä»»åŠ¡åªéœ€æ‰§è¡Œä¸€æ¬¡ï¼Œç”¨å®Œåˆ é™¤è‡ªèº«*/
   vTaskDelete(NULL);
 }
 

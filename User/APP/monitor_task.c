@@ -63,8 +63,8 @@ uint8_t MonitorTask_IsAllHealthy(void)
     for (i = 0; i < TASK_ID_MAX; i++)
     {
         /*
-         * 1. Liveness ¼ì²é£º
-         *    ÈÎÎñÊÇ·ñÔÚ¹æ¶¨Ê±¼äÄÚ±¨¸æÐÄÌø£¿
+         * 1. Liveness æ£€æŸ¥ï¼š
+         *    ä»»åŠ¡æ˜¯å¦åœ¨è§„å®šæ—¶é—´å†…æŠ¥å‘Šå¿ƒè·³ï¼Ÿ
          */
         if ((now - task_monitor[i].last_tick) >
             task_monitor[i].heartbeat_timeout)
@@ -73,8 +73,8 @@ uint8_t MonitorTask_IsAllHealthy(void)
         }
 
         /*
-         * 2. Functionality ¼ì²é£º
-         *    ×î½üÒ»´ÎÒµÎñ×´Ì¬ÊÇ·ñÕý³££¿
+         * 2. Functionality æ£€æŸ¥ï¼š
+         *    æœ€è¿‘ä¸€æ¬¡ä¸šåŠ¡çŠ¶æ€æ˜¯å¦æ­£å¸¸ï¼Ÿ
          */
         if (task_monitor[i].function_ok == 0)
         {
@@ -82,8 +82,8 @@ uint8_t MonitorTask_IsAllHealthy(void)
         }
 
         /*
-         * 3. Functionality ÐÂÏÊ¶È¼ì²é£º
-         *    ¹¦ÄÜ×´Ì¬ÊÇ·ñ³¤ÆÚÃ»ÓÐ¸üÐÂ£¿
+         * 3. Functionality æ–°é²œåº¦æ£€æŸ¥ï¼š
+         *    åŠŸèƒ½çŠ¶æ€æ˜¯å¦é•¿æœŸæ²¡æœ‰æ›´æ–°ï¼Ÿ
          */
         if ((now - task_monitor[i].last_function_tick) >
             task_monitor[i].function_timeout)
