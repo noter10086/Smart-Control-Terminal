@@ -81,9 +81,9 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  /* ��ȡ��־ */
+    
   iwdg_reset = BSP_IWDG_ResetOccurred();
-  /* �����־ */
+
   BSP_IWDG_ClearResetFlags();
   /* USER CODE END Init */
 
@@ -109,7 +109,6 @@ int main(void)
   }
   
   
-  /* ��ʼ��Ӳ�� */
   BSP_Init();
   
   freertos_start();
