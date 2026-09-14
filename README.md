@@ -216,6 +216,45 @@ Previous reset reason: IWDG
 - **SysTick 归属**：FreeRTOS 占用 SysTick 产生系统节拍，HAL 时基改用 TIM2，二者互不干扰
 - **看门狗作为最后防线**：健康监控负责发现异常，IWDG 负责在软件已无法自救时强制硬件复位
 
+## 已知问题与踩坑记录
+
+本节记录移植 FreeRTOS 与调试过程中实际遇到并解决的问题，以及当前仍存在的限制，供后续维护与同类项目参考。
+
+### 已修复
+
+#### 1. 系统节拍频率偏差 2.33 倍
+
+**现象**：所有延时与超时判断的实际时长都短于标称值，但功能表现「看似正常」，极难察觉。
+
+**原因**：`FreeRTOSConfig.h` 中的 `configCPU_CLOCK_HZ` 配置为 `72000000`（该值与其他 STM32F1 系列工程的典型主频相符，应为移植模板时未同步修改）。FreeRTOS 的 `port.c` 在未定义 `configSYSTICK_CLOCK_HZ` 时会直接取用 `configCPU_CLOCK_HZ`，而 Cortex-M 的 SysTick 以核心时钟计数。本工程 SYSCLK 为 168MHz，重装载值却按 72MHz 计算，导致实际节拍为 2333Hz 而非 1000Hz。
+
+**修复**：将 `configCPU_CLOCK_HZ` 修正为 `168000000`，与实际 SYSCLK 保持一致。
+
+> 移植 FreeRTOS 配置模板时此项极易被忽略 —— 数值错误既不会导致编译失败，也不会让程序立刻崩溃，只会让所有时间参数静默失准。
+
+#### 2. control_task 优先级越界后被静默截断
+
+**现象**：`control_task` 期望以最高优先级抢占运行，实际却与 `collect_task` 平级。
+
+**原因**：`configMAX_PRIORITIES` 为 5（合法优先级为 0~4），而 `control_task` 被赋予优先级 5。FreeRTOS 的 `tasks.c` 会将越界优先级截断为 `configMAX_PRIORITIES - 1`；由于工程未定义 `configASSERT`，该越界不会触发断言告警，属于静默发生。
+
+**修复**：将 `configMAX_PRIORITIES` 提升至 6，保留原有的优先级编排意图。
+
+#### 3. start_task 的临界区永不退出
+
+**现象**：`taskEXIT_CRITICAL()` 被写在 `vTaskDelete(NULL)` 之后。
+
+**原因**：`vTaskDelete(NULL)` 删除任务自身后不会返回，其后的语句成为死代码。在 Cortex-M 上 `taskENTER_CRITICAL()` 通过设置 `BASEPRI` 屏蔽中断，中断嵌套计数 `uxCriticalNesting` 因此无法归零，中断将持续处于屏蔽状态。
+
+**修复**：调整语句顺序，先退出临界区，再删除任务自身。
+
+### 已知限制
+
+- **采集与控制任务的功能检查恒为通过**：`collect_task` 以 `adc_value > 4095U` 判定业务异常，但 ADC 为 12 位、量程上限即 4095，该条件永不成立；`control_task` 的 `duty > 100U` 同理。即功能监控的「业务正确性」维度目前形同虚设，实际生效的是心跳超时检查。
+- **看门狗任务自身不在监控范围内**：`TaskMonitorId_t` 仅涵盖 collect / control / log 三个任务，`watchdog_task` 未纳入自检。
+- **控制策略为线性映射**：占空比由采样值线性换算（`duty = adc × 100 / 4095`），未引入 PID 等闭环调节。
+- **源码中文注释为 GBK 编码**：Keil 与 GitHub 代码页均可正常显示（GitHub 会自动探测编码），但用 VS Code 等默认以 UTF-8 解析的工具打开会显示乱码，不影响编译。
+
 ## 许可
 
 本项目为学习与实践性质的开源工程。`Drivers/` 目录下的 STM32 HAL 库版权归 STMicroelectronics 所有（遵循其附带许可），`FreeRTOS/` 目录版权归 Amazon.com, Inc. 所有（MIT 许可）。
